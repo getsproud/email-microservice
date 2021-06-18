@@ -14,11 +14,11 @@ const sendActivationMail = call => new Promise((resolve, reject) => {
   }
 
   const data = {
-    list_ids: ['b5c01061-d12c-4367-819c-5195af050206'],
+    list_ids: ['d45bbf90-5eb4-425a-8272-25e74feba828'],
     contacts: [{
       email: query.to,
       custom_fields: {
-        e3_T: 'TRIAL'
+        e1_T: 'TRIAL'
       }
     }],
     mail_settings: {
@@ -32,7 +32,7 @@ const sendActivationMail = call => new Promise((resolve, reject) => {
     try {
       await mailer({
         to: process.env.NODE_ENV !== 'production' ? 'test@sproud.io' : query.to,
-        templateId: 'd-e98abbec5a9243e5b9c7c9c95b9b5487',
+        templateId: 'd-12137a4786e94b0dbbf6199387c9f478',
         data: {
           activation_code: `${query.code}`.replace(/(\d{3})(\d{3})/, '$1-$2')
         }
