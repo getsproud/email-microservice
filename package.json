@@ -11,11 +11,11 @@
   },
   "scripts": {
     "release": "CI=true HUSKY_SKIP_HOOKS=1 GITHUB_TOKEN=$(grep GITHUB_TOKEN .env | cut -d '=' -f2) semantic-release  --no-ci",
-    "build": "babel src -d dist -w --copy-files --delete-dir-on-start",
+    "build": "babel src -d dist --copy-files --delete-dir-on-start",
     "clean": "node -e 'require(\"rimraf\")(\"./dist\", () => {})'",
     "start": "node dist/main.js",
     "test": "mocha --recursive \"./test/*.js\"",
-    "lint": "eslint . -c .eslintrc --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint",
+    "lint": "eslint . -c .eslintrc --cache --cache-location ./node_modules/.cache/eslint",
     "dev": "nodemon --exec babel-node src/main.js",
     "precommit": "lint-staged"
   },
