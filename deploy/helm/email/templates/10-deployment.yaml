@@ -67,6 +67,9 @@ spec:
           value: {{ $.Values.mongo.collection }}
         - name: MONGO_HOST
           value: {{ $.Values.mongo.host }}
+        envFrom:
+        - secretRef:
+            name: sendgrid-secret
       imagePullSecrets:
       - name: gh-registry
 ---
