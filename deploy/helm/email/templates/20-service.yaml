@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ $.Values.service.image | quote }}
+    {{- if and (ne $.Values.environment "io") (contains "rc-" $.Values.service.tag) }}
+    feature: stage
+    {{- else if ne $.Values.environment "io" }}
+    feature: {{ $.Values.service.tag | quote }}
+    {{- else }}
+    tag: {{ $.Values.service.tag | quote }}
+    {{- end }}
+  name: {{ $.Values.service.image }}-service
+spec:
+  ports:
+  - protocol: TCP
+    port: 50051
+  selector:
+    app: {{ $.Values.service.image | quote }}
+    {{- if and (ne $.Values.environment "io") (contains "rc-" $.Values.service.tag) }}
+    feature: stage
+    {{- else if ne $.Values.environment "io" }}
+    feature: {{ $.Values.service.tag | quote }}
+    {{- else }}
+    tag: {{ $.Values.service.tag | quote }}
+    {{- end }}
+---

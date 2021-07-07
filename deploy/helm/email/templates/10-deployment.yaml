@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.service.image }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ $.Values.service.image | quote }}
+      {{- if and (ne $.Values.environment "io") (contains "rc-" $.Values.service.tag) }}
+      feature: stage
+      {{- else if ne $.Values.environment "io" }}
+      feature: {{ $.Values.service.tag | quote }}
+      {{- else }}
+      tag: {{ $.Values.service.tag | quote }}
+      {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Values.service.image | quote }}
+        {{- if and (ne $.Values.environment "io") (contains "rc-" $.Values.service.tag) }}
+        feature: stage
+        {{- else if ne $.Values.environment "io" }}
+        feature: {{ $.Values.service.tag | quote }}
+        {{- else }}
+        tag: {{ $.Values.service.tag | quote }}
+        {{- end }}
+    spec:
+      containers:
+      - name: {{ $.Values.service.image }}-service
+        image: ghcr.io/getsproud/{{ $.Values.service.image }}:{{ $.Values.service.tag }}
+        imagePullPolicy: Always
+        readinessProbe:
+          tcpSocket:
+            port: 50051
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 50051
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        ports:
+        - containerPort: 50051
+          protocol: TCP
+        env:
+        - name: COTE_LOG
+          value: "false"
+        - name: DOMAIN
+          value: {{ $.Values.domain }}.{{ $.Values.environment }}
+        - name: NODE_ENV
+          value: {{ $.Values.nodeEnv }}
+        - name: COTE_DISCOVERY_REDIS_HOST
+          value: {{ $.Values.redis.service }}.{{ $.Values.namespace}}.svc.cluster.local
+        - name: DISCOVERY_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-cluster-developer-password
+              key: password
+        - name: MONGO_USER
+          value: {{ $.Values.mongo.user }}
+        - name: MONGO_COLLECTION
+          value: {{ $.Values.mongo.collection }}
+        - name: MONGO_HOST
+          value: {{ $.Values.mongo.host }}
+      imagePullSecrets:
+      - name: gh-registry
+---

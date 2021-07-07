@@ -1,0 +1,5 @@
+process.env.MONGO_USER = 'sproud-dev'
+process.env.MONGO_PASSWORD = '2Rh3s2l5wCSMkPod'
+process.env.MONGO_HOST = 'sproud-cluster-dev.divei.mongodb.net'
+process.env.MONGO_COLLECTION = 'sproud-dev'
+process.env.NODE_ENV = 'test'

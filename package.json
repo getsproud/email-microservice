@@ -14,9 +14,9 @@
     "build": "babel src -d dist --copy-files --delete-dir-on-start",
     "clean": "node -e 'require(\"rimraf\")(\"./dist\", () => {})'",
     "start": "node dist/main.js",
-    "test": "mocha --recursive \"./test/*.js\"",
+    "test": "jest ./test/*.js",
     "lint": "eslint . -c .eslintrc --cache --cache-location ./node_modules/.cache/eslint",
-    "dev": "nodemon --exec babel-node src/main.js",
+    "dev": "telepresence intercept api-gateway -n sproud-stage --port 50051 -- nodemon --exec babel-node src/main.js",
     "precommit": "lint-staged"
   },
   "dependencies": {
@@ -29,27 +29,27 @@
     "nodemailer": "^6.4.16"
   },
   "devDependencies": {
-    "@commitlint/cli": "^12.0.1",
-		"commitlint-config-gitmoji": "^2.2.5",
-		"husky": "^4.3.0",
-		"semantic-release": "^17.3.7",
-		"semantic-release-config-gitmoji": "^1.2.4",
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
     "@babel/node": "^7.12.6",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
+    "@commitlint/cli": "^12.0.1",
+    "@shelf/jest-mongodb": "^1.2.5",
+    "commitlint-config-gitmoji": "^2.2.5",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^4.3.0",
+    "jest": "^27.0.6",
     "lint-staged": "^10.5.1",
-    "mocha": "^8.2.0",
-    "mocha-jenkins-reporter": "^0.4.5",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "semantic-release": "^17.3.7",
+    "semantic-release-config-gitmoji": "^1.2.4"
   },
   "nodemonConfig": {
     "verbose": true,
